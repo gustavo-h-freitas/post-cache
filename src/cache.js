@@ -42,12 +42,14 @@ module.exports = {
       }
 
       cache.set(res.config.url + '-' + JSON.stringify({
-        ...(Object.entries(bodyObject).length ? { queryObject } : null),
-        ...(Object.entries(bodyObject).length ? { bodyObject } : null)
+        ...(Object.keys(queryObject).length ? { queryObject } : null),
+        ...(Object.keys(bodyObject).length ? { bodyObject } : null)
       }), res.data)
     } else {
       cache.set(res.config.url, res.data)
     }
+
+    console.log(cache.keys())
   },
   get (url, body, config, queryParams, bodyParams) {
     if (!url) {
@@ -91,8 +93,8 @@ module.exports = {
       }
 
       return cache.get(url + '-' + JSON.stringify({
-        ...(Object.entries(queryObject).length ? { queryObject } : null),
-        ...(Object.entries(bodyObject).length ? { bodyObject } : null)
+        ...(Object.keys(queryObject).length ? { queryObject } : null),
+        ...(Object.keys(bodyObject).length ? { bodyObject } : null)
       }))
     } 
 

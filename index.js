@@ -48,7 +48,7 @@ module.exports = function (axios, cachedUrls) {
   }
 
   return {
-    async post (url, body, options) {
+    async post (url, body, config) {
       if (!body) {
         throw ReferenceError('You must provide a body for a post request (even if it is empty)')
       }
@@ -73,38 +73,15 @@ module.exports = function (axios, cachedUrls) {
 
       if (cacheable) {
         let cached = null
-        const queryKeys = {}
-        const bodyKeys = {}
 
         if (typeof cacheable === 'string') {
           cached = cache.get(cacheable)
         } else {
-
-          if (cacheable.bodyParams) {
-            if(Array.isArray(cacheable.bodyParams)) {
-              cacheable.bodyParams.forEach(elem => {
-                bodyKeys[elem] = body[elem]
-              })
-            } else {
-              throw new TypeError('BodyParams must be an array')
-            }
-          }
-
-
-          if (cacheable.queryParams) {
-            if (Array.isArray(cacheable.queryParams)) {
-              cacheable.queryParams.forEach(elem => {
-                queryParams[elem] = config.params[elem]
-              })
-            } else {
-              throw new TypeError('QueryParams must be an array')
-            }
-          }
-
-          cached = cache.get(cacheable.url, { ...queryKeys, ...bodyKeys })
+          cached = cache.get(cacheable.url, body, config, cacheable.queryParams, cacheable.bodyParams)
         } 
 
         if (cached) {
+          console.log('puxado da cache')
           return Promise.resolve({
             data: cached,
             status: 200,
@@ -113,14 +90,15 @@ module.exports = function (axios, cachedUrls) {
             request: {}
           })
         } else {
-          const response = await axios.post(url, body, options)
-          cache.set(response, [bodyKeys])
+          console.log('salvo na cache')
+          const response = await axios.post(url, body, config)
+          cache.set(response, cacheable.queryParams, cacheable.bodyParams)
 
           return response
         }
       }
       
-      return axios.post(url, body, options)
+      return axios.post(url, body, config)
     },
 
     async get (url, config) {

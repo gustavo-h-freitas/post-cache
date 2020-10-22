@@ -1,0 +1,30 @@
+{
+  "name": "post-cache",
+  "version": "1.0.0",
+  "description": "Package that allows you to easily cache POST requests",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roceroo/post-cache.git"
+  },
+  "keywords": [
+    "post",
+    "cache",
+    "axios",
+    "scalable",
+    "request",
+    "http"
+  ],
+  "author": "Plinio & Gustavo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/roceroo/post-cache/issues"
+  },
+  "homepage": "https://github.com/roceroo/post-cache#readme",
+  "dependencies": {
+    "node-cache": "^5.1.2"
+  }
+}

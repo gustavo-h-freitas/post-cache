@@ -3,16 +3,14 @@ const cache = require('./src/cache')
 /*
   cachedUrls = [
     {
-      url: 'fb-handler/graphics_feed,
-      queryParams: ['myAss'],
-      bodyParams: ['yourAss'],
-      type: 'post'
+      url: 'api.myapi/graphics,
+      queryParams: ['exQuery'],
+      bodyParams: ['exBody'],
     },
     {
-      url: 'fb-handler'
-      type: get
+      url: 'api.myapi/info'
     },
-    ''
+    'api.myapi/superinfo'
   ]
 */
 
@@ -83,7 +81,7 @@ module.exports = function (axios, cachedUrls) {
         } else {
 
           if (cacheable.bodyParams) {
-            if(Array.isArray('BodyParams must be an array')) {
+            if(Array.isArray(cacheable.bodyParams)) {
               cacheable.bodyParams.forEach(elem => {
                 bodyKeys[elem] = body[elem]
               })
@@ -94,7 +92,7 @@ module.exports = function (axios, cachedUrls) {
 
 
           if (cacheable.queryParams) {
-            if (Array.isArray(cacheable,queryParams)) {
+            if (Array.isArray(cacheable.queryParams)) {
               cacheable.queryParams.forEach(elem => {
                 queryParams[elem] = config.params[elem]
               })
@@ -103,7 +101,7 @@ module.exports = function (axios, cachedUrls) {
             }
           }
 
-          cached = cache.get(cacheable.ur, { ...queryKeys, ...bodyKeys })
+          cached = cache.get(cacheable.url, { ...queryKeys, ...bodyKeys })
         } 
 
         if (cached) {
@@ -116,7 +114,7 @@ module.exports = function (axios, cachedUrls) {
           })
         } else {
           const response = await axios.post(url, body, options)
-          cache.set(response, { ...queryKeys, ...odyParams})
+          cache.set(response, [bodyKeys])
 
           return response
         }

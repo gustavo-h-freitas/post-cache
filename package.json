@@ -1,7 +1,7 @@
 {
-  "name": "post-cache",
-  "version": "1.0.0",
-  "description": "Package that allows you to easily cache POST requests",
+  "name": "axios-post-cache",
+  "version": "1.0.2",
+  "description": "Package that allows you to easily cache POST/GET requests",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,10 +1,11 @@
-import NodeCache from 'node-cache'
+const NodeCache = require('node-cache')
 
 const cache = new NodeCache({
   stdTTL: 900 // standard in seconds
 })
 
-export default {
+
+module.exports = {
   set (res, fields) {
     if (!res) {
       throw new ReferenceError('you must pass a response object')

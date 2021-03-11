@@ -81,7 +81,6 @@ module.exports = function (axios, cachedUrls) {
         } 
 
         if (cached) {
-          console.log('puxado da cache')
           return Promise.resolve({
             data: cached,
             status: 200,
@@ -90,7 +89,6 @@ module.exports = function (axios, cachedUrls) {
             request: {}
           })
         } else {
-          console.log('salvo na cache')
           const response = await axios.post(url, body, config)
           cache.set(response, cacheable.queryParams, cacheable.bodyParams)
 
@@ -108,7 +106,7 @@ module.exports = function (axios, cachedUrls) {
       cachedUrls.forEach(elem => {
         if (typeof elem === 'string') {
           if (url.includes(elem)) {
-            cacheable = elem            
+            cacheable = elem        
           }
         } else {
           if (url.includes(elem.url)) {
@@ -134,22 +132,28 @@ module.exports = function (axios, cachedUrls) {
               throw new TypeError('QueryParams must be an array')
             }
           }
-
-          cached = cache.get(cacheable.url, { ...queryKeys })
+          if (Object.keys(queryKeys).length > 0) {
+            cached = cache.get(cacheable.url, { ...queryKeys })
+          } else {
+            cached = cache.get(cacheable)
+          }
         } 
 
         if (cached) {
           return Promise.resolve({
             data: cached,
             status: 200,
-            statusText: 'OK',
+            statusText: 'OK, cached',
             headers: {},
             request: {}
           })
         } else {
           const response = await axios.get(url, config)
-          cache.set(response, { ...queryKeys })
-
+          if (Object.keys(queryKeys).length > 0) {
+            cache.set(response, { ...queryKeys })
+          } else {
+            cache.set(response)
+          }
           return response
         }
       }

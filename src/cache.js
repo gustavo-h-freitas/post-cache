@@ -49,7 +49,6 @@ module.exports = {
       cache.set(res.config.url, res.data)
     }
 
-    console.log(cache.keys())
   },
   get (url, body, config, queryParams, bodyParams) {
     if (!url) {

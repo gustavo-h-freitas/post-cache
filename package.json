@@ -1,6 +1,6 @@
 {
   "name": "axios-post-cache",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Package that allows you to easily cache POST/GET requests",
   "main": "index.js",
   "scripts": {

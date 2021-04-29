@@ -132,8 +132,10 @@ module.exports = function (axios, cachedUrls) {
               throw new TypeError('QueryParams must be an array')
             }
           }
+          console.log(queryKeys);
           if (Object.keys(queryKeys).length > 0) {
-            cached = cache.get(cacheable.url, undefined, config, [queryKeys], undefined)
+            cached = cache.get(url, undefined, config, queryKeys, undefined)
+            console.log(cached);
           } else {
             cached = cache.get(cacheable)
           }
@@ -150,7 +152,7 @@ module.exports = function (axios, cachedUrls) {
         } else {
           const response = await axios.get(url, config)
           if (Object.keys(queryKeys).length > 0) {
-            cache.set(response, [queryKeys])
+            cache.set(response, queryKeys, undefined, url)
           } else {
             cache.set(response)
           }

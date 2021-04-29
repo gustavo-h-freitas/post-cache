@@ -5,13 +5,13 @@ const cache = new NodeCache({
 })
 
 module.exports = {
-  set (res, queryParams, bodyParams) {
+  set (res, queryParams, bodyParams, url) {
     if (!res) {
       throw new ReferenceError('you must pass a response object')
     }
 
-    if (!Array.isArray(queryParams) && typeof queryParams !== 'undefined') {
-      throw new TypeError('queryParams must be an array or unset')
+    if (Array.isArray(queryParams) && typeof queryParams !== 'undefined') {
+      throw new TypeError('queryParams must be an object or unset')
     }
 
     if (!Array.isArray(bodyParams) && typeof bodyParams !== 'undefined') {
@@ -22,15 +22,14 @@ module.exports = {
     //   res.config.url = '/' + res.config.url
     // }
 
-    if (Array.isArray(queryParams) || Array.isArray(bodyParams)) {
+    if (!Array.isArray(queryParams) || Array.isArray(bodyParams)) {
       const queryObject = {}
       const bodyObject = {}
       const req = res.data
 
 
-      if (Array.isArray(queryParams) && res.config.params) {
-        queryParams.forEach(elem => {
-          let key = Object.keys(elem)[0]
+      if (!Array.isArray(queryParams) && res.config.params) {
+        Object.keys(queryParams).forEach(key => {
           queryObject[key] = res.config.params[key]
         })
       }
@@ -41,13 +40,13 @@ module.exports = {
         })
       }
 
-      cache.set(res.config.url + '-' + JSON.stringify({
+      cache.set(url + '-' + JSON.stringify({
         ...(Object.keys(queryObject).length ? { queryObject } : null),
         ...(Object.keys(bodyObject).length ? { bodyObject } : null)
       }), res.data)
 
     } else {
-      cache.set(res.config.url, res.data)
+      cache.set(url, res.data)
     }
 
   },
@@ -64,8 +63,8 @@ module.exports = {
       throw new TypeError('config must be an object or unset')
     }
 
-    if (!Array.isArray(queryParams) && typeof queryParams !== 'undefined') {
-      throw new TypeError('queryParams must be an array or unset')
+    if (Array.isArray(queryParams) && typeof queryParams !== 'undefined') {
+      throw new TypeError('queryParams must be an object or unset')
     }
 
     if (!Array.isArray(bodyParams) && typeof bodyParams !== 'undefined') {
@@ -76,15 +75,13 @@ module.exports = {
     //   url = '/' + url
     // }
 
-    if (Array.isArray(queryParams) || Array.isArray(bodyParams)) {
+    if (!Array.isArray(queryParams) || Array.isArray(bodyParams)) {
       const queryObject = {}
       const bodyObject = {}
 
 
-      if (Array.isArray(queryParams) && config && config.params) {
-        queryParams.forEach(elem => {
-          let key = Object.keys(elem)[0]
-          config.params[elem]
+      if (!Array.isArray(queryParams) && config && config.params) {
+        Object.keys(queryParams).forEach(key => {
           queryObject[key] = config.params[key]
         })
       }

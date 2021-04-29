@@ -115,7 +115,6 @@ module.exports = function (axios, cachedUrls) {
         }
       })
 
-      console.log(cacheable);
       if (cacheable) {
         let cached = null
         const queryKeys = {}

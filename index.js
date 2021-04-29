@@ -115,6 +115,7 @@ module.exports = function (axios, cachedUrls) {
         }
       })
 
+      console.log(cacheable);
       if (cacheable) {
         let cached = null
         const queryKeys = {}
@@ -124,20 +125,20 @@ module.exports = function (axios, cachedUrls) {
         } else {
 
           if (cacheable.queryParams) {
-            if (Array.isArray(cacheable,queryParams)) {
+            if (Array.isArray(cacheable.queryParams) && config) {
               cacheable.queryParams.forEach(elem => {
-                queryParams[elem] = config.params[elem]
+                queryKeys[elem] = config.params[elem]
               })
-            } else {
+            } else if (config) {
               throw new TypeError('QueryParams must be an array')
             }
           }
           if (Object.keys(queryKeys).length > 0) {
-            cached = cache.get(cacheable.url, { ...queryKeys })
+            cached = cache.get(cacheable.url, undefined, config, [queryKeys], undefined)
           } else {
             cached = cache.get(cacheable)
           }
-        } 
+        }
 
         if (cached) {
           return Promise.resolve({
@@ -150,7 +151,7 @@ module.exports = function (axios, cachedUrls) {
         } else {
           const response = await axios.get(url, config)
           if (Object.keys(queryKeys).length > 0) {
-            cache.set(response, { ...queryKeys })
+            cache.set(response, [queryKeys])
           } else {
             cache.set(response)
           }

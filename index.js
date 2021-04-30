@@ -132,10 +132,8 @@ module.exports = function (axios, cachedUrls) {
               throw new TypeError('QueryParams must be an array')
             }
           }
-          console.log(queryKeys);
           if (Object.keys(queryKeys).length > 0) {
             cached = cache.get(url, undefined, config, queryKeys, undefined)
-            console.log(cached);
           } else {
             cached = cache.get(cacheable)
           }

@@ -5,6 +5,10 @@ const cache = new NodeCache({
 })
 
 module.exports = {
+  flushAll () {
+    cache.flushAll()
+  },
+
   set (res, queryParams, bodyParams, url) {
     if (!res) {
       throw new ReferenceError('you must pass a response object')

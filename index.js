@@ -159,6 +159,10 @@ module.exports = function (axios, cachedUrls) {
       }
       
       return axios.get(url, config)
+    },
+
+    flushAll () {
+      cache.flushAll()
     }
   }
 }
